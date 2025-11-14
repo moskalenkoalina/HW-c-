@@ -1,6 +1,7 @@
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 
 int main() {
@@ -9,39 +10,35 @@ int main() {
 
     if (!inputFile) {
         cout << "File could not be opened" << endl;
-        return 0;
-
+        return 1;
     }
 
     if (!outputFile) {
         cout << "File could not be created" << endl;
-        return 0;
-
+        return 1;
     }
 
     int num;
+    bool hasPositiveNumbers = false;
+
     while (inputFile >> num) {
         if (num > 0) {
+            hasPositiveNumbers = true;
+
             double root = sqrt(num);
-            outputFile << num<< ",";
-            int int_num = int(root);
-            outputFile << int_num << ".";
 
-            double fractional = root - int_num;
-
-            for (int i = 0; i < 5; i++) {
-                fractional *= 10;
-                int digit = (int)fractional;
-                outputFile << digit;
-                fractional -= digit;
-            }
-            outputFile << endl;
-
-
-
+            outputFile << num << "," << fixed << setprecision(5) << root << endl;
         }
     }
+
+    if (!hasPositiveNumbers) {
+        cout << "No positive numbers found in the file" << endl;
+    } else {
+        cout << "Successfully processed positive numbers" << endl;
+    }
+
     inputFile.close();
     outputFile.close();
+
     return 0;
-};
+}
