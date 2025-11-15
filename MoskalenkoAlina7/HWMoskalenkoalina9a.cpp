@@ -1,30 +1,30 @@
 #include <stdio.h>
+#define MAX_SIZE 100
 
 int main() {
     int n;
-    double max, current;
+    double numbers[MAX_SIZE];
 
     printf("Enter n: ");
     scanf("%d", &n);
 
-    if (n <= 0) {
-        printf("Error (n >= 1)\n");
+    if (n <= 0 || n > MAX_SIZE) {
+        printf("Error: n must be between 1 and %d\n", MAX_SIZE);
         return 1;
     }
 
-    printf("Enter number 1: ");
-    scanf("%lf", &max);
+    for (int i = 0; i < n; i++) {
+        printf("Enter number %d: ", i + 1);
+        scanf("%lf", &numbers[i]);
+    }
 
-    for (int i = 2; i <= n; i++) {
-        printf("Enter number %d: ", i);
-        scanf("%lf", &current);
-
-        if (current > max) {
-            max = current;
+    double max = numbers[0];
+    for (int i = 1; i < n; i++) {
+        if (numbers[i] > max) {
+            max = numbers[i];
         }
     }
 
-    printf("maximum: %.2lf\n", max);
-
+    printf("Maximum: %.2lf\n", max);
     return 0;
 }
