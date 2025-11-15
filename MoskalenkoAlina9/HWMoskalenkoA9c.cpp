@@ -6,19 +6,36 @@ int main() {
     int n, m;
 
     printf("Enter line matrix N: ");
-    scanf("%d", &n);
+    if (scanf("%d", &n) != 1 || n <= 0) {
+        printf("Incorrect input for N!\n");
+        return 1;
+    }
     printf("Enter columns matrix M: ");
-    scanf("%d", &m);
+    if (scanf("%d", &m) != 1 || m <= 0) {
+        printf("Incorrect input for M!\n");
+        return 1;
+    }
 
     double **matrix = (double**)malloc(n * sizeof(double*));
+    if (matrix == NULL) {
+        printf("Memory allocation error!\n");
+        return 1;
+    }
     for (int i = 0; i < n; i++) {
         matrix[i] = (double*)malloc(m * sizeof(double));
+        if (matrix[i] == NULL) {
+            printf("Memory allocation error!\n");
+            return 1;
+        }
     }
 
     printf("Enter element matrix:\n");
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            scanf("%lf", &matrix[i][j]);
+            if (scanf("%lf", &matrix[i][j]) != 1) {
+                printf("Помилка вводу елемента [%d][%d]!\n", i, j);
+                return 1;
+            }
         }
     }
 
