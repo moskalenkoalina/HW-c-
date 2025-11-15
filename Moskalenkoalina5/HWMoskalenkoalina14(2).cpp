@@ -2,7 +2,7 @@
 
 int main() {
     unsigned int n;
-    
+
     printf("Enter a natural number: ");
     scanf("%u", &n);
 
