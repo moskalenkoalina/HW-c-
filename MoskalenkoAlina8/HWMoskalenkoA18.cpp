@@ -1,80 +1,65 @@
 #include <stdio.h>
-#include <stdlib.h>
+
+#define MAX_N 100
+#define MAX_M 100
 
 int main() {
     int n, m;
+    int matrix[MAX_N][MAX_M];
 
-    printf("Enter n: ");
+    printf("Enter the number of rows n: ");
     scanf("%d", &n);
-    printf("Enter m: ");
+    printf("Enter the number of columns m: ");
     scanf("%d", &m);
 
-    int **matrix = (int**)malloc(n * sizeof(int*));
-    for(int i = 0; i < n; i++) {
-        matrix[i] = (int*)malloc(m * sizeof(int));
+    if (n <= 0 || n > MAX_N || m <= 0 || m > MAX_M) {
+        printf("Incorrect matrix dimensions!\n");
+        return 1;
     }
 
-    printf("Enter elements:\n");
-    for(int i = 0; i < n; i++) {
-        printf("Line %d: ", i + 1);
-        for(int j = 0; j < m; j++) {
+    printf("Enter the matrix elements:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
             scanf("%d", &matrix[i][j]);
         }
     }
 
-    int first_non_neg = -1;
-    int last_non_neg = -1;
+    int first_row = -1;
+    int last_row = -1;
 
-    for(int i = 0; i < n; i++) {
-        int all_non_negative = 1;
-
-        for(int j = 0; j < m; j++) {
-            if(matrix[i][j] < 0) {
-                all_non_negative = 0;
+    for (int i = 0; i < n; i++) {
+        int all_negative = 1;
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] >= 0) {
+                all_negative = 0;
                 break;
             }
         }
-
-        if(all_non_negative) {
-            if(first_non_neg == -1) {
-                first_non_neg = i;
-            }
-            last_non_neg = i;
+        if (all_negative) {
+            if (first_row == -1) first_row = i;
+            last_row = i;
         }
     }
 
-    printf("\nOrigin matrix:\n");
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < m; j++) {
+    if (first_row != -1 && last_row != -1 && first_row != last_row) {
+        for (int j = 0; j < m; j++) {
+            int temp = matrix[first_row][j];
+            matrix[first_row][j] = matrix[last_row][j];
+            matrix[last_row][j] = temp;
+        }
+    } else if (first_row == -1) {
+        printf("No rows with only negative elements were found.\n");
+    } else {
+        printf("Only one row with negative elements found. Exchange not possible.\n");
+    }
+
+    printf("Result:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
             printf("%d\t", matrix[i][j]);
         }
         printf("\n");
     }
-
-    if(first_non_neg != -1 && last_non_neg != -1 && first_non_neg != last_non_neg) {
-        printf("Swapping rows %d and %d\n", first_non_neg + 1, last_non_neg + 1);
-
-        int *temp = matrix[first_non_neg];
-        matrix[first_non_neg] = matrix[last_non_neg];
-        matrix[last_non_neg] = temp;
-
-        printf("Result:\n");
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                printf("%d\t", matrix[i][j]);
-            }
-            printf("\n");
-        }
-    } else if(first_non_neg == -1) {
-        printf("\nError. No rows with all non-negative elements.\n");
-    } else {
-        printf("\nError. First and last non-negative rows are the same.\n");
-    }
-
-    for(int i = 0; i < n; i++) {
-        free(matrix[i]);
-    }
-    free(matrix);
 
     return 0;
 }
